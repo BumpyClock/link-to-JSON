@@ -43,6 +43,7 @@ var (
 )
 
 func fetchMetadata(url string) (*ResponseItem, error) {
+
 	// Check cache first
 	if cached, found := cch.Get(url); found {
 		return cached.(*ResponseItem), nil
@@ -170,6 +171,15 @@ func main() {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "URL parameter is required"})
 			return
 		}
+
+		// Validate the URL
+		_, err := URL.ParseRequestURI(url)
+		if err != nil {
+			logrus.Error("Invalid URL: ", url)
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid URL"})
+			return
+		}
+
 		metadata, err := fetchMetadata(url)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch metadata"})
