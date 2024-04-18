@@ -1,14 +1,17 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	URL "net/url"
+	"os"
 	"strconv"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/gocolly/colly"
+	"github.com/joho/godotenv"
 	"github.com/patrickmn/go-cache" // Caching package
 	"github.com/sirupsen/logrus"
 	"golang.org/x/time/rate" // Rate limiter
@@ -36,6 +39,7 @@ type WebImage struct {
 var (
 	rateLimiter = rate.NewLimiter(1, 3) // Allows 1 request per second with a burst capacity of 3
 	cch         = cache.New(30*time.Minute, 60*time.Minute)
+	userAgent   string
 )
 
 func fetchMetadata(url string) (*ResponseItem, error) {
@@ -47,14 +51,16 @@ func fetchMetadata(url string) (*ResponseItem, error) {
 	c := colly.NewCollector()
 	c.OnRequest(func(r *colly.Request) {
 		logrus.Info("Visiting", r.URL)
-		r.Headers.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3")
+		r.Headers.Set("User-Agent", userAgent)
 	})
 	result := &ResponseItem{URL: url, Images: []WebImage{}}
 	result.Domain = getBaseDomain(url)
 	webImage := WebImage{}
 
 	c.OnHTML("title", func(e *colly.HTMLElement) {
-		result.Title = e.Text
+		if result.Title == "" {
+			result.Title = e.Text
+		}
 	})
 	c.OnHTML(`meta[name="description"]`, func(e *colly.HTMLElement) {
 		result.Description = e.Attr("content")
@@ -132,6 +138,19 @@ func getBaseDomain(url string) string {
 
 func main() {
 	router := gin.Default()
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	userAgent := os.Getenv("LINK2JSON_USER_AGENT")
+	if userAgent == "" {
+		userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+		logrus.Warn("User agent not set, using default")
+	} else {
+		logrus.Info("User agent set to: ", userAgent)
+	}
 
 	// Setup CORS
 	config := cors.DefaultConfig()
