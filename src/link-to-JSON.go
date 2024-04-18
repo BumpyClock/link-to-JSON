@@ -153,6 +153,11 @@ func main() {
 		logrus.Info("User agent set to: ", userAgent)
 	}
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "80"
+	}
+
 	// Setup CORS
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
@@ -192,5 +197,5 @@ func main() {
 		c.JSON(http.StatusOK, metadata)
 	})
 
-	router.Run(":8080")
+	router.Run(":" + port)
 }
