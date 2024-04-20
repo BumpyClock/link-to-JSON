@@ -1,5 +1,5 @@
-github.com/BumpyClock/go-link2json v0.0.5 h1:rMbmRwTX87QndVASjw6opNhcIOwaF0836Fgju58EUmE=
-github.com/BumpyClock/go-link2json v0.0.5/go.mod h1:w3vbjR5BPskjJ6Dn7O3EhMCMm4+vAeQLYnj/1aVRTCg=
+github.com/BumpyClock/go-link2json v0.0.6 h1:/3sSy3FQzRxi/JsdzrCutDdpuhkYqljPwv+hTJlEOzw=
+github.com/BumpyClock/go-link2json v0.0.6/go.mod h1:w3vbjR5BPskjJ6Dn7O3EhMCMm4+vAeQLYnj/1aVRTCg=
 github.com/PuerkitoBio/goquery v1.9.1 h1:mTL6XjbJTZdpfL+Gwl5U2h1l9yEkJjhmlTeV9VPW7UI=
 github.com/PuerkitoBio/goquery v1.9.1/go.mod h1:cW1n6TmIMDoORQU5IU/P1T3tGFunOeXEpGP2WHRwkbY=
 github.com/andybalholm/cascadia v1.3.2 h1:3Xi6Dw5lHF15JtdcmAHD3i1+T8plmv7BQ/nsViSLyss=

@@ -3,7 +3,7 @@ module link-to-json
 go 1.22.1
 
 require (
-	github.com/BumpyClock/go-link2json v0.0.5
+	github.com/BumpyClock/go-link2json v0.0.6
 	github.com/gin-contrib/cors v1.7.1
 	github.com/gin-gonic/gin v1.9.1
 	github.com/joho/godotenv v1.5.1
